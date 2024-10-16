@@ -1,0 +1,996 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responsive Header with Modal</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Custom Styles */
+        .city-item img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .city-item p {
+            margin-top: 5px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        /* Modal Styles */
+        .modal-content {
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .modal-footer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+        /* Custom styles for header */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 15px 20px;
+            background-color: transparent;
+            z-index: 100;
+            max-width: 960%;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .dropdown-menu {
+            min-width: 200px;
+            color: black;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #333;
+        }
+
+        /* Adjustments for modal to be fully responsive */
+        .modal-dialog {
+            max-width: 90%;
+            width: 70%;
+        }
+
+
+         /* Custom styles for hero section */
+         .hero-section {
+            position: relative;
+            height: 100vh;
+            background: url('yellow-car-gas-station_23-2150697544.jpg') no-repeat center center;
+            background-size: cover;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .hero-text {
+            text-align: left;
+            font-size: 2rem;
+            font-weight: bold;
+            z-index: 1;
+            position: absolute;
+            top: 10%;
+            left: 5%;
+        }
+
+        /* Modal form that will scroll */
+        .modal-form-container {
+            position: fixed;
+            top: 50%;
+            right: 0;
+            transform: translateY(-50%);
+            z-index: 100;
+            width: 470px;
+            padding: 20px;
+            margin-right: 50px;
+            height: 425px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease;
+        }
+
+        /* Modal Form Scroll Effect */
+        .modal-form-container.show {
+            transform: translateY(-50%);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h5 {
+            margin: 0;
+            font-size: 1.25rem;
+        }
+
+        .close-btn {
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* Custom Dropdown Styles */
+        .dropdown-menu {
+            max-height: 300px;
+            overflow-y: auto;
+            width: 100%;
+        }
+
+        .dropdown-item img {
+            width: 30px;
+            height: 30px;
+            margin-right: 10px;
+            border-radius: 50%;
+        }
+      /* Container for Points */
+      .container-custom {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: flex-start;
+            margin-top: 30px;
+        }
+
+        /* Points Section Styling */
+.points-section {
+    display: flex; /* Use flexbox to make points responsive */
+    flex-wrap: wrap; /* Allow points to wrap to next line if necessary */
+    justify-content: space-evenly; /* Evenly space points across available space */
+    gap: 15px; /* Space between points */
+    margin-bottom: 20px; /* Add space below the points */
+}
+
+/* Point Styling */
+.point {
+    background-color: #f1f1f1;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-align: center;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s;
+    width: calc(100% / 4 - 15px); /* 4 items per row by default */
+    box-sizing: border-box; /* Make sure the padding is included in the width */
+}
+
+/* Hover effect on points */
+.point:hover {
+    background-color: #007bff;
+    color: #fff;
+}
+
+/* RESPONSIVE STYLES */
+
+/* For larger screens (e.g., tablets or desktops) */
+@media (max-width: 1200px) {
+    .point {
+        width: calc(100% / 5 - 15px); /* 5 items per row */
+    }
+}
+
+/* For tablets or smaller devices (e.g., phones in landscape) */
+@media (max-width: 992px) {
+    .point {
+        width: calc(100% / 4 - 15px); /* 4 items per row */
+    }
+}
+
+/* For small tablets and mobile screens */
+@media (max-width: 768px) {
+    .point {
+        width: calc(100% / 3 - 15px); /* 3 items per row */
+    }
+}
+
+/* For small mobile screens */
+@media (max-width: 576px) {
+    .point {
+        width: 100%; /* Stack points vertically on small screens */
+        margin-bottom: 10px; /* Space between stacked points */
+    }
+}
+
+/* Hide modal on phone view */
+@media (max-width: 576px) {
+    #modalForm {
+        display: none; /* Hide modal on mobile devices */
+    }
+}
+
+
+        /* Content Display for each point */
+        .content-container {
+            display: none;
+            margin-top: 20px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: calc(100% - 20px); /* Adjust width for modal space */
+        }
+
+        .content-container img {
+            width: 48%; /* Image takes half the width */
+            border-radius: 8px;
+        }
+
+        .content-container .text-content {
+            width: 48%; /* Text takes the other half */
+            padding-left: 20px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .point {
+                width: 20%; /* On smaller screens, make the points wider */
+                margin-bottom: 10px;
+            }
+
+            .content-container {
+                flex-direction: column;
+            }
+
+            .content-container img,
+            .content-container .text-content {
+                width: 100%;
+                margin: 10px 0;
+            }
+        }
+
+        .service-box {
+    text-align: center;
+    margin-bottom: 20px;
+    border: 1px solid #ddd; /* Optional: Add border for image box */
+    border-radius: 10px;
+    padding: 10px;
+    background-color: #f9f9f9;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease-in-out;
+}
+
+.service-box:hover {
+    transform: translateY(-10px); /* Hover effect to lift the box */
+}
+
+.service-box img {
+    width: 100%;
+    height: auto;
+    border-radius: 10px; /* Optional: Round image corners */
+}
+
+.service-box h5 {
+    margin-top: 10px;
+    font-size: 18px;
+    color: #333;
+}
+
+.service-box p {
+    font-size: 14px;
+    color: #777;
+    margin-top: 5px;
+}
+
+/* Responsive Layout: Ensure images are responsive */
+@media (max-width: 768px) {
+    .service-box img {
+        width: 100%; /* Ensure images fill up their container */
+    }
+}
+    </style>
+</head>
+
+<body>
+
+    <!-- Header Section -->
+    <header class="container-fluid">
+        <div class="row align-items-center">
+            <!-- Left Section: Logo and Delhi Dropdown -->
+            <div class="col-12 col-md-4 d-flex align-items-center justify-content-between">
+                <div class="logo h3">
+                    <img src="WHITE.png" alt="Logo" class="img-fluid">
+                </div>
+                <div class="dropdown ms-2" style="margin-right: 100px;">
+                    <button class="btn btn-secondary" type="button" id="delhiDropdown" aria-expanded="false">
+                        Delhi
+                    </button>
+                    <!-- Modal or dropdown will open on click -->
+                </div>
+            </div>
+    
+            <!-- Middle Section: Empty for symmetry -->
+            <div class="col-12 col-md-4"></div>
+    
+            <!-- Right Section: Blog/More Dropdown & Login -->
+            <div class="col-12 col-md-4 d-flex justify-content-center justify-content-md-end align-items-center mt-3 mt-md-0">
+                <a href="#" class="btn btn-secondary">Blog</a> &nbsp; &nbsp;
+                                <div class="dropdown me-3">
+                    <button class="btn btn-secondary" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        More
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#">Option 1</a></li>
+                        <li><a class="dropdown-item" href="#">Option 2</a></li>
+                    </ul>
+                </div>
+                <!-- Login Button -->
+                <a href="#" class="btn btn-primary">Login</a>
+            </div>
+        </div>
+    </header>
+    
+
+    <!-- Location Modal -->
+    <div class="modal fade" id="locationModal" tabindex="-1" aria-labelledby="locationModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="locationModalLabel">Select Your Location</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <h6>Select a city</h6>
+                    <div class="row row-cols-2 row-cols-md-3 row-cols-lg-6 g-4">
+                        <!-- Dynamic City Items -->
+                        <div class="col city-item">
+                            <img src="delhi-dev.png" alt="City 1">
+                            <p>City 1</p>
+                        </div>
+                        <div class="col city-item">
+                            <img src="delhi-dev.png" alt="City 2">
+                            <p>City 2</p>
+                        </div>
+                        <div class="col city-item">
+                            <img src="delhi-dev.png" alt="City 3">
+                            <p>City 3</p>
+                        </div>
+                        <div class="col city-item">
+                            <img src="delhi-dev.png" alt="City 4">
+                            <p>City 4</p>
+                        </div>
+                        <div class="col city-item">
+                            <img src="delhi-dev.png" alt="City 5">
+                            <p>City 5</p>
+                        </div>
+                        <div class="col city-item">
+                            <img src="delhi-dev.png" alt="City 6">
+                            <p>City 6</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary">Detect My Location</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+<!-- Hero Section -->
+<section class="hero-section">
+   
+</section>
+
+<!-- Modal Form for Location and Product Selection -->
+<div class="modal-form-container" id="modalForm">
+    <div class="modal-header">
+        <h2>Experience The Best Car Services In Delhi</h2>
+        <span class="close-btn" id="closeModal">&times;</span>
+    </div>
+    <form>
+        <div class="mb-3">
+            <label for="locationDropdown" class="form-label">Get instant quotes for your car service</label>
+            <div class="dropdown">
+                <button class="btn btn-outline-secondary dropdown-toggle w-100" type="button" id="locationDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    Delhi
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="locationDropdown">
+                    <li><a class="dropdown-item" href="#">City 1</a></li>
+                    <li><a class="dropdown-item" href="#">City 2</a></li>
+                    <li><a class="dropdown-item" href="#">City 3</a></li>
+                    <li><a class="dropdown-item" href="#">City 4</a></li>
+                    <li><a class="dropdown-item" href="#">City 5</a></li>
+                    <li><a class="dropdown-item" href="#">City 6</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label for="productDropdown" class="form-label">Select Product</label>
+            <div class="dropdown">
+                <button class="btn btn-outline-secondary dropdown-toggle w-100" type="button" id="productDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    Product
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="productDropdown">
+                    <li><a class="dropdown-item" href="#">Product 1</a></li>
+                    <li><a class="dropdown-item" href="#">Product 2</a></li>
+                    <li><a class="dropdown-item" href="#">Product 3</a></li>
+                    <li><a class="dropdown-item" href="#">Product 4</a></li>
+                    <li><a class="dropdown-item" href="#">Product 5</a></li>
+                    <li><a class="dropdown-item" href="#">Product 6</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Mobile Number Button -->
+        <div class="mb-3">
+            <label for="mobileNumber" class="form-label">Enter Your Mobile Number</label>
+            <button class="btn btn-outline-secondary w-100" type="button" id="mobileNumberButton">
+                Enter Mobile Number
+            </button> 
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit" class="btn btn-primary w-100" style="margin-top: 20px;">Submit</button>
+    </form>
+</div>
+
+
+
+<!-- Points Section in One Row -->
+<div class="container-custom">
+    <!-- 7 Clickable Points -->
+    <div class="points-section">
+        <div class="point" onclick="showContent(0)">Point 1</div>
+        <div class="point" onclick="showContent(1)">Point 2</div>
+        <div class="point" onclick="showContent(2)">Point 3</div>
+        <div class="point" onclick="showContent(3)">Point 4</div>
+        <div class="point" onclick="showContent(4)">Point 5</div>
+        <div class="point" onclick="showContent(5)">Point 6</div>
+        <div class="point" onclick="showContent(6)">Point 7</div>
+    </div>
+</div>
+
+
+<!-- Content for each point (Initially hidden) -->
+<div id="content-0" class="content-container" style="display: flex;">
+    <div class="text-content">
+        <h3>Our Services</h3>
+        <p>Explore the various services we offer to make your experience better. Choose the one that fits your needs:</p>
+        
+        <!-- First Row: 4 Columns with Image and Point -->
+        <div class="row">
+            <div class="col-md-3 service-box">
+                <img src="delhi-dev.png" class="img-fluid" alt="Service 1">
+                <h5>Service 1</h5>
+                <p>Short description of Service 1. Providing high-quality solutions to meet your needs.</p>
+            </div>
+            <div class="col-md-3 service-box">
+                <img src="delhi-dev.png" class="img-fluid" alt="Service 2">
+                <h5>Service 2</h5>
+                <p>Short description of Service 2. Best-in-class service for your convenience.</p>
+            </div>
+            <div class="col-md-3 service-box">
+                <img src="delhi-dev.png" class="img-fluid" alt="Service 3">
+                <h5>Service 3</h5>
+                <p>Short description of Service 3. We offer reliable and efficient solutions.</p>
+            </div>
+            <div class="col-md-3 service-box">
+                <img src="delhi-dev.png" class="img-fluid" alt="Service 4">
+                <h5>Service 4</h5>
+                <p>Short description of Service 4. Our services are designed to meet your requirements.</p>
+            </div>
+        </div>
+
+        <!-- Second Row: 4 Smaller Image Boxes -->
+        <div class="row">
+            <div class="col-md-3 service-box">
+                <img src="delhi-dev.png" class="img-fluid" alt="Service 5">
+                <h5>Service 3</h5>
+                <p>Short description of Service 3. We offer reliable and efficient solutions.</p>
+            </div>
+            <div class="col-md-3 service-box">
+                <img src="delhi-dev.png" class="img-fluid" alt="Service 6">
+                <h5>Service 3</h5>
+                <p>Short description of Service 3. We offer reliable and efficient solutions.</p>
+            </div>
+            <div class="col-md-3 service-box">
+                <img src="delhi-dev.png" class="img-fluid" alt="Service 7">
+                <h5>Service 3</h5>
+                <p>Short description of Service 3. We offer reliable and efficient solutions.</p>
+            </div>
+            <div class="col-md-3 service-box">
+                <img src="delhi-dev.png" class="img-fluid" alt="Service 8">
+                <h5>Service 3</h5>
+                <p>Short description of Service 3. We offer reliable and efficient solutions.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Content for Point 1: How GoMachine Works -->
+<div id="content-1" class="content-container" style="display: none;">
+    <div class="text-content">
+        <h3>How GoMachine Works</h3>
+        <p>GoMachine is designed to simplify your processes and provide you with efficient, automated solutions. Here's a step-by-step guide on how it works:</p>
+
+        <!-- Step-by-Step Process -->
+        <div class="how-it-works-steps">
+            <div class="step">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <h4>Sign Up & Register</h4>
+                    <p>The first step is to sign up and create your account on GoMachine. Provide your basic information and preferences to get started.</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <h4>Choose Your Service</h4>
+                    <p>Once you're registered, you can choose from a range of services based on your needs. Whether it's automation, monitoring, or analytics, we've got you covered.</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <h4>Set Preferences</h4>
+                    <p>After selecting your service, configure your preferences such as service schedule, notifications, and any specific requirements for your system.</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-number">4</div>
+                <div class="step-content">
+                    <h4>GoMachine Starts Working</h4>
+                    <p>Once everything is set up, GoMachine starts working automatically to deliver the service you've chosen. You can monitor its progress in real-time through the dashboard.</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-number">5</div>
+                <div class="step-content">
+                    <h4>Receive Notifications & Reports</h4>
+                    <p>GoMachine will notify you about the status of your service. You can also receive detailed reports and insights based on the actions performed.</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-number">6</div>
+                <div class="step-content">
+                    <h4>Feedback & Improvements</h4>
+                    <p>After the service is completed, provide feedback on your experience. GoMachine constantly improves based on user feedback to offer better services.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="content-2" class="content-container" style="display: none;">
+    <div class="text-content">
+        <h3>Ratings & Reviews</h3>
+        <p>We value your feedback! Please take a moment to rate our service and leave a review based on your experience.</p>
+        
+        <!-- Rating System (Star Rating) -->
+        <div class="rating-system">
+            <label for="rating" class="form-label">Your Rating:</label>
+            <div id="rating" class="star-rating">
+                <span class="star" data-value="1">&#9733;</span>
+                <span class="star" data-value="2">&#9733;</span>
+                <span class="star" data-value="3">&#9733;</span>
+                <span class="star" data-value="4">&#9733;</span>
+                <span class="star" data-value="5">&#9733;</span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="review-text" class="form-label">Your Review:</label>
+            <textarea id="review-text" class="form-control" rows="4" placeholder="Write your review here..."></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary mt-3">Submit Review</button>
+
+        <hr>
+
+        <h4>Recent Reviews</h4>
+        
+        <!-- Sample Reviews Section -->
+        <div class="reviews">
+            <div class="review">
+                <div class="review-header">
+                    <span class="review-author">Madhu</span> - 
+                    <span class="review-date">October 16, 2024</span>
+                    <div class="review-rating">
+                        <span>&#9733;&#9733;&#9733;&#9733;&#9733;</span> <!-- 5-star rating -->
+                    </div>
+                </div>
+                <p class="review-content">"Excellent service! I'm very happy with the quality of work and the professional attitude of the team. Highly recommend!"</p>
+            </div>
+            <div class="review">
+                <div class="review-header">
+                    <span class="review-author">Madhu</span> - 
+                    <span class="review-date">October 16, 2024</span>
+                    <div class="review-rating">
+                        <span>&#9733;&#9733;&#9733;&#9733;</span> <!-- 4-star rating -->
+                    </div>
+                </div>
+                <p class="review-content">"Good service overall. A few delays, but they resolved the issue quickly. Will use again."</p>
+            </div>
+            <div class="review">
+                <div class="review-header">
+                    <span class="review-author">Madhu</span> - 
+                    <span class="review-date">October 16, 2024</span>
+                    <div class="review-rating">
+                        <span>&#9733;&#9733;&#9733;</span> <!-- 3-star rating -->
+                    </div>
+                </div>
+                <p class="review-content">"The service was okay, but the communication could have been better. Overall decent experience."</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="content-3" class="content-container" style="display: none;">
+    <div class="text-content">
+        <h3>Frequently Asked Questions (FAQ)</h3>
+        <p>Here are some common questions our customers have. If you have more questions, feel free to contact us!</p>
+        
+        <!-- FAQ Section -->
+        <div class="accordion" id="faqAccordion">
+            <!-- Question 1 -->
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingOne">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                        <strong>What services do you offer?</strong>
+                    </button>
+                </h2>
+                <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                        We offer a wide range of services including maintenance, repairs, installation, and consultation. For more details, visit our services page.
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Question 2 -->
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingTwo">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                        <strong>How can I book a service?</strong>
+                    </button>
+                </h2>
+                <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                        Booking a service is easy! Simply log in to your account, select the service type you need, choose a date and time, and confirm your booking.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 3 -->
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingThree">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                        <strong>Do you offer customer support?</strong>
+                    </button>
+                </h2>
+                <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                        Yes! Our customer support team is available 24/7 to assist you with any queries or issues you might have. You can contact us via phone, email, or live chat.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 4 -->
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingFour">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                        <strong>What are your payment methods?</strong>
+                    </button>
+                </h2>
+                <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                        We accept various payment methods including credit cards, bank transfers, and cash on delivery, depending on the service and location.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 5 -->
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingFive">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                        <strong>How do I cancel or reschedule my service?</strong>
+                    </button>
+                </h2>
+                <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingFive" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                        You can cancel or reschedule your service appointment by logging into your account and selecting "Manage Appointments" before 24 hours of the scheduled service.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 6 -->
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingSix">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
+                        <strong>How can I track my service status?</strong>
+                    </button>
+                </h2>
+                <div id="collapseSix" class="accordion-collapse collapse" aria-labelledby="headingSix" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                        You can track your service status directly through our website or mobile app. Simply log in to your account and view the status of your active services.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Content for Point 5 with Download App Option -->
+<div id="content-4" class="content-container" style="display: none;">
+    <div class="text-content">
+        <h3>Download Our App</h3>
+        <p>Get our mobile app and enjoy exclusive features and services directly from your smartphone. It’s fast, easy to use, and packed with all the tools you need for a great experience.</p>
+        
+        <!-- Download App Section -->
+        <div class="d-flex">
+            <!-- Left side: Image -->
+            <div class="app-image" style="flex: 1; padding-right: 20px;">
+                <img src="gm-app-download-update (1).jpg" alt="App Image" class="img-fluid" style="border-radius: 10px; width: 400px;">
+            </div>
+            <!-- Right side: Content -->
+            <div class="app-content" style="flex: 2;">
+                <h4>Why Choose Our App?</h4>
+                <ul>
+                    <li><strong>Easy Access:</strong> Quickly access all of our services and features.</li>
+                    <li><strong>Exclusive Offers:</strong> Get special discounts and offers available only in the app.</li>
+                    <li><strong>Real-time Updates:</strong> Receive push notifications for updates, promotions, and news.</li>
+                    <li><strong>Secure Payments:</strong> Make safe and secure transactions directly through the app.</li>
+                    <li><strong>User-friendly Interface:</strong> Enjoy a smooth and intuitive experience with easy navigation.</li>
+                </ul>
+                <h4>Download Now:</h4>
+                <p>Available for both <strong>Android</strong> and <strong>iOS</strong>. Click below to get started:</p>
+                
+                <!-- App download buttons -->
+                <div class="app-buttons">
+                    <a href="#" class="btn btn-primary" style="margin-right: 10px;">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/a/a0/Google_Play_Store_badge_EN.svg" alt="Google Play" style="height: 50px;">
+                    </a>
+                    <a href="#" class="btn btn-secondary">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/1/1b/Apple_App_Store_badge.svg" alt="App Store" style="height: 50px;">
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="content-5" class="content-container" style="display: none;">
+    <div class="text-content">
+        <h3>Service Guidelines</h3>
+        <p>Welcome to our service guide. Here, we outline everything you need to know about our services, including how to get started, the types of services offered, and how to take full advantage of our offerings.</p>
+
+        <!-- Service Guidelines Article -->
+        <article>
+            <h4>1. Getting Started</h4>
+            <p>To get started with our services, you must first register on our website. After registering, you can choose from a variety of service options, such as maintenance, repairs, and installation, depending on your needs.</p>
+
+            <h4>2. Types of Services Offered</h4>
+            <ul>
+                <li><strong>Maintenance:</strong> Regular check-ups and preventive maintenance to ensure your equipment is running smoothly.</li>
+                <li><strong>Repairs:</strong> If something goes wrong, we are here to fix it promptly and efficiently.</li>
+                <li><strong>Installations:</strong> Our team offers professional installation of new products and systems.</li>
+                <li><strong>Consultation:</strong> Get expert advice on the best practices and product selection for your needs.</li>
+            </ul>
+
+            <h4>3. How to Book a Service</h4>
+            <p>Booking a service is simple. Just follow these steps:</p>
+            <ol>
+                <li>Log into your account on our website.</li>
+                <li>Navigate to the "Services" section.</li>
+                <li>Select the service type you need (e.g., Maintenance, Repair, etc.).</li>
+                <li>Choose your preferred date and time for the service appointment.</li>
+                <li>Confirm your booking and wait for our team to arrive on the scheduled day.</li>
+            </ol>
+
+            <h4>4. Service Policies</h4>
+            <p>We have a few important policies to ensure a smooth experience for both parties:</p>
+            <ul>
+                <li><strong>Cancellation Policy:</strong> You can cancel or reschedule your appointment up to 24 hours before the scheduled time without any charges.</li>
+                <li><strong>Payment Policy:</strong> Payment is due after the service is completed. We accept various payment methods, including credit cards, bank transfers, and cash.</li>
+                <li><strong>Service Guarantee:</strong> We offer a satisfaction guarantee on all services performed. If you're not happy with our work, let us know and we'll make it right.</li>
+            </ul>
+
+            <h4>5. Frequently Asked Questions</h4>
+            <p>Here are some common questions that we get asked:</p>
+            <ul>
+                <li><strong>What is the average cost of a service?</strong> The cost of our services depends on the type of service and complexity. You can get a quote before confirming your booking.</li>
+                <li><strong>How long does a service take?</strong> Most services are completed in 1-2 hours. For more complex installations, the time may vary.</li>
+                <li><strong>Do you provide service outside of business hours?</strong> Yes, we offer emergency services. Please contact us for availability.</li>
+            </ul>
+
+            <h4>6. Contact Us</h4>
+            <p>If you need further assistance or have any questions, feel free to reach out to our customer support team. We are here to help!</p>
+
+            <p>Thank you for choosing our services, and we look forward to assisting you!</p>
+        </article>
+    </div>
+</div>
+
+<div id="content-6" class="content-container" style="display: none;">
+    <div class="text-content">
+        <h3>Price List for Point 7</h3>
+        <p>Here is the price list for the products and services under Point 7.</p>
+
+        <!-- Price List Table -->
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Item</th>
+                    <th>Description</th>
+                    <th>Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Item 1</td>
+                    <td>High-quality product with premium features</td>
+                    <td>$100</td>
+                </tr>
+                <tr>
+                    <td>Item 2</td>
+                    <td>Affordable product with great value</td>
+                    <td>$50</td>
+                </tr>
+                <tr>
+                    <td>Item 3</td>
+                    <td>Budget-friendly with decent features</td>
+                    <td>$30</td>
+                </tr>
+                <tr>
+                    <td>Item 4</td>
+                    <td>Premium product for professionals</td>
+                    <td>$200</td>
+                </tr>
+                <tr>
+                    <td>Item 5</td>
+                    <td>Compact and efficient for daily use</td>
+                    <td>$70</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+   
+</div>
+
+
+<!-- Top Footer -->
+<footer class="top-footer bg-dark text-white py-5">
+    <div class="container">
+        <div class="row">
+            <!-- About Us Section -->
+            <div class="col-12 col-md-3 mb-4 mb-md-0">
+                <h5>About Us</h5>
+                <p>We are a trusted real estate company with years of experience in providing the best properties to our customers. Your dream home is just a click away.</p>
+            </div>
+            
+            <!-- Services Section -->
+            <div class="col-12 col-md-3 mb-4 mb-md-0">
+                <h5>Our Services</h5>
+                <ul class="list-unstyled">
+                    <li><a href="#" class="text-white">Property Buying</a></li>
+                    <li><a href="#" class="text-white">Property Renting</a></li>
+                    <li><a href="#" class="text-white">Property Selling</a></li>
+                    <li><a href="#" class="text-white">Consultation</a></li>
+                </ul>
+            </div>
+
+            <!-- Popular Brands Section -->
+            <div class="col-12 col-md-3 mb-4 mb-md-0">
+                <h5>Popular Brands</h5>
+                <ul class="list-unstyled">
+                    <li><a href="#" class="text-white">Brand 1</a></li>
+                    <li><a href="#" class="text-white">Brand 2</a></li>
+                    <li><a href="#" class="text-white">Brand 3</a></li>
+                    <li><a href="#" class="text-white">Brand 4</a></li>
+                </ul>
+            </div>
+
+            <!-- Popular Areas Section -->
+            <div class="col-12 col-md-3 mb-4 mb-md-0">
+                <h5>Popular Areas Near You</h5>
+                <ul class="list-unstyled">
+                    <li><a href="#" class="text-white">Area 1</a></li>
+                    <li><a href="#" class="text-white">Area 2</a></li>
+                    <li><a href="#" class="text-white">Area 3</a></li>
+                    <li><a href="#" class="text-white">Area 4</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- Bottom Footer -->
+<footer class="bottom-footer bg-secondary text-white py-3">
+    <div class="container text-center">
+        <ul class="list-unstyled d-flex justify-content-center mb-0">
+            <li><a href="#" class="text-white me-4">Privacy Policy</a></li>
+            <li><a href="#" class="text-white me-4">Terms & Conditions</a></li>
+            <li><a href="#" class="text-white">Sitemap</a></li>
+        </ul>
+    </div>
+</footer>
+
+<!-- Copyright Footer -->
+<footer class="copyright-footer bg-dark text-white py-2">
+    <div class="container text-center">
+        <p>&copy; 2024 Your Real Estate Company. All Rights Reserved.</p>
+    </div>
+</footer>
+
+
+    <!-- Bootstrap JS (Required for Modal and Dropdown) -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+
+    <script>
+        // Open Location Modal on Delhi Dropdown button click
+        document.getElementById('delhiDropdown').addEventListener('click', function() {
+            var locationModal = new bootstrap.Modal(document.getElementById('locationModal'));
+            locationModal.show();
+        });
+
+
+         // Modal Form Show and Hide Logic
+         document.getElementById('modalForm').classList.add('show');
+        
+        // Close Modal on click of X
+        document.getElementById('closeModal').addEventListener('click', function() {
+            document.getElementById('modalForm').classList.remove('show');
+        });
+
+        // Show Modal Form on page load
+        window.addEventListener('load', function() {
+            document.getElementById('modalForm').classList.add('show');
+        });
+
+        // Enable scrolling effect for the modal form
+        window.addEventListener('scroll', function() {
+            const scrollTop = window.scrollY;
+            document.getElementById('modalForm').style.top = `calc(50% + 151.273px);`;
+        });
+
+        // Function to show content when a point is clicked
+        function showContent(index) {
+            // Hide all content containers
+            for (let i = 0; i < 7; i++) {
+                document.getElementById('content-' + i).style.display = 'none';
+            }
+            // Show the clicked content
+            document.getElementById('content-' + index).style.display = 'flex';
+        }
+
+        const stars = document.querySelectorAll('.star-rating .star');
+    stars.forEach(star => {
+        star.addEventListener('click', function() {
+            let rating = this.getAttribute('data-value');
+            // Highlight selected stars
+            stars.forEach(star => {
+                star.style.color = star.getAttribute('data-value') <= rating ? '#FFD700' : '#ccc'; // Gold for selected stars
+            });
+            console.log('Rating:', rating); // You can send this value to your backend for saving
+        });
+    });
+    </script>
+
+</body>
+
+</html>
